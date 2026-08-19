@@ -25,7 +25,7 @@ CREATE TABLE profiles (
 
 -- Workspaces
 CREATE TABLE workspaces (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     logo_url TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -34,7 +34,7 @@ CREATE TABLE workspaces (
 
 -- Memberships (Workspace <-> Profile)
 CREATE TABLE memberships (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     role membership_role NOT NULL DEFAULT 'member',
@@ -45,7 +45,7 @@ CREATE TABLE memberships (
 
 -- Clients
 CREATE TABLE clients (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     company TEXT,
@@ -61,7 +61,7 @@ CREATE TABLE clients (
 
 -- Projects
 CREATE TABLE projects (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     client_id UUID REFERENCES clients(id) ON DELETE SET NULL,
     name TEXT NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE project_members (
 
 -- Deals
 CREATE TABLE deals (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     client_id UUID REFERENCES clients(id) ON DELETE SET NULL,
     owner_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
@@ -98,7 +98,7 @@ CREATE TABLE deals (
 
 -- Tasks
 CREATE TABLE tasks (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
     client_id UUID REFERENCES clients(id) ON DELETE CASCADE,
@@ -114,7 +114,7 @@ CREATE TABLE tasks (
 
 -- Notes
 CREATE TABLE notes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     author_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
     client_id UUID REFERENCES clients(id) ON DELETE CASCADE,
@@ -131,7 +131,7 @@ ALTER TABLE notes ADD CONSTRAINT notes_entity_check CHECK (
 
 -- Activities
 CREATE TABLE activities (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     actor_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
     entity_type TEXT NOT NULL, -- e.g., 'client', 'project', 'deal', 'task'

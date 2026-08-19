@@ -1,11 +1,11 @@
 -- Migration: Add Workspace Invitations
 
 CREATE TABLE workspace_invitations (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     email TEXT NOT NULL,
     role membership_role NOT NULL DEFAULT 'member',
-    token UUID NOT NULL DEFAULT uuid_generate_v4() UNIQUE,
+    token UUID NOT NULL DEFAULT gen_random_uuid() UNIQUE,
     invited_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     expires_at TIMESTAMPTZ NOT NULL DEFAULT NOW() + INTERVAL '7 days',
