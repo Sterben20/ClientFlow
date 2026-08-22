@@ -7,8 +7,8 @@ export default function SettingsLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col md:flex-row min-h-[calc(100vh-60px)]">
-      <aside className="w-full md:w-64 border-b md:border-r bg-muted/20 p-4 md:p-6 space-y-4">
+    <div className="flex flex-col md:flex-row">
+      <aside className="w-full md:w-64 self-start border-b md:border-r bg-muted/20 p-4 md:p-6 space-y-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight mb-4">Settings</h2>
           <nav className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0">
@@ -29,9 +29,9 @@ export default function SettingsLayout({
           </nav>
         </div>
       </aside>
-      <main className="flex-1 w-full">
+      <div className="flex-1 min-w-0">
         {children}
-      </main>
+      </div>
     </div>
   )
 }

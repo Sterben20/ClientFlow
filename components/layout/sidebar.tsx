@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { createClient as createSupabase } from "@/lib/supabase/server"
 import { getCurrentWorkspace } from "@/lib/workspace"
 import { WorkspaceSwitcher } from "@/components/workspace-switcher"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -28,8 +29,17 @@ export async function Sidebar({ className }: { className?: string }) {
   
   let workspaces: { id: string; name: string; role: string }[] = []
   let activeWorkspaceId = ""
+  let profile: { full_name: string | null; email: string | null } | null = null
 
   if (user) {
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('full_name, email')
+      .eq('id', user.id)
+      .single()
+    
+    if (profileData) profile = profileData
+
     const { data: userWorkspaces } = await supabase
       .from('memberships')
       .select(`
@@ -89,15 +99,16 @@ export async function Sidebar({ className }: { className?: string }) {
       <div className="p-4 border-t">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3 px-3">
-            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-              {user?.email?.charAt(0).toUpperCase() || "U"}
+            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold shrink-0">
+              {profile?.full_name?.charAt(0).toUpperCase() || profile?.email?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"}
             </div>
-            <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-medium truncate">{user?.email || "My Account"}</span>
+            <div className="flex flex-col overflow-hidden flex-1">
+              <span className="text-sm font-medium truncate">{profile?.full_name || user?.email || "My Account"}</span>
               <span className="text-xs text-muted-foreground capitalize">
                 {workspaces.find(w => w.id === activeWorkspaceId)?.role || "Member"}
               </span>
             </div>
+            <ThemeToggle />
           </div>
           <form action={logout}>
             <button type="submit" className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-all">

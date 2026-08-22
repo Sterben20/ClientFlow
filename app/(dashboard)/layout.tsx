@@ -13,9 +13,9 @@ export default async function DashboardLayout({
     redirect("/workspaces");
   }
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="fixed inset-0 flex overflow-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 min-h-0">
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
           <MobileNav>
             <Sidebar className="flex w-full h-full border-r-0" />
@@ -24,7 +24,7 @@ export default async function DashboardLayout({
             {/* The title can be managed locally by pages or we can just leave it clean */}
           </div>
         </header>
-        <main className="flex-1 overflow-x-hidden overflow-y-auto min-w-0">
+        <main className="flex-1 min-w-0 min-h-0 overflow-x-hidden overflow-y-auto">
           {children}
         </main>
       </div>
