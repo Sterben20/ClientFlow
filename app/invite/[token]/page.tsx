@@ -47,7 +47,7 @@ export default async function InvitePage({ params }: { params: { token: string }
                     <Link href={`/login?redirect=/invite/${token}`}>Log In</Link>
                   </Button>
                   <Button variant="outline" asChild>
-                    <Link href={`/signup?redirect=/invite/${token}`}>Create an Account</Link>
+                    <Link href={`/register?redirect=/invite/${token}`}>Create an Account</Link>
                   </Button>
                 </div>
               </div>

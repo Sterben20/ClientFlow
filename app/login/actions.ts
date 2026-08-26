@@ -4,6 +4,14 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
+/** Validates a redirect path to prevent open-redirect vulnerabilities. */
+function safeRedirect(path: string | null, fallback = '/'): string {
+  if (!path || !path.startsWith('/') || path.startsWith('//')) {
+    return fallback
+  }
+  return path
+}
+
 export async function login(formData: FormData) {
   const supabase = createClient()
 
@@ -21,7 +29,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/')
+  redirect(safeRedirect(formData.get('redirect') as string, '/'))
 }
 
 export async function signup(formData: FormData) {
@@ -69,7 +77,7 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  redirect(safeRedirect(formData.get('redirect') as string, '/dashboard'))
 }
 
 export async function logout() {
