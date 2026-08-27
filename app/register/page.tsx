@@ -52,10 +52,9 @@ function RegisterForm() {
     setError(null)
     try {
       const supabase = createClient()
-      const origin = window.location.origin
       const redirectTo = redirect
-        ? `${origin}/auth/callback?next=${encodeURIComponent(redirect)}`
-        : `${origin}/auth/callback`
+        ? `https://my-clientflow.my.id/auth/callback?next=${encodeURIComponent(redirect)}`
+        : `https://my-clientflow.my.id/auth/callback`
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",

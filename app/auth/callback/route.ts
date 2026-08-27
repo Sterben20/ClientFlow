@@ -31,18 +31,9 @@ export async function GET(request: Request) {
             return cookieStore.getAll()
           },
           setAll(cookiesToSet) {
-            try {
-              // Set on the request cookies so subsequent calls see it
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options)
-              )
-              // Explicitly set on the response we are returning to ensure preservation
-              cookiesToSet.forEach(({ name, value, options }) =>
-                response.cookies.set(name, value, options)
-              )
-            } catch (error) {
-              console.error("Cookie set error in callback:", error)
-            }
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            )
           },
         },
       }
